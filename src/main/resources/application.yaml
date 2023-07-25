@@ -1,0 +1,62 @@
+server:
+  port: 8089
+  servlet:
+    session:
+      timeout: 15000
+  address: 0.0.0.0
+spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 100MB
+  datasource:
+    url: ${db_url}
+    username: ${db_username}
+    password: ${db_password}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+    show-sql: false
+    open-in-view: false
+  mvc:
+    view:
+      prefix: /templates
+      suffix: .html
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          cache-public: true
+          max-age: 365D
+      chain:
+        strategy:
+          content:
+            enabled: true
+#    <-> SOON <->
+#  mail:
+#    host: smtp.gmail.com
+#    username: rossano@gmail.com
+#    password: ${scodp_email_password}
+#    port: 587
+#    properties:
+#      mail:
+#        smtp:
+#          starttls:
+#            enable: true
+#          auth: true
+
+logging:
+  file:
+    name: rossano.log
+
+  logback:
+    rollingpolicy:
+      max-file-size: 500MB
+      max-history: 499
+  level:
+    root: info

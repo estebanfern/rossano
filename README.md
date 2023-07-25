@@ -18,5 +18,5 @@ Gestión de inventario, pedidos, facturas, etc.
 Para desplegar este proyecto, necesitas tener las siguiente variables de entorno configuradas:
 `db_url`
 `db_username`
-`db_username`
+`db_password`
 

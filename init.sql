@@ -17,6 +17,9 @@ INSERT INTO public.permiso (code, nombre) VALUES ('eliminarClientes', 'Editar Cl
 INSERT INTO public.permiso (code, nombre) VALUES ('pedidosGlobales', 'Consultar todos los pedidos');
 INSERT INTO public.permiso (code, nombre) VALUES ('facturar', 'Facturar');
 
+INSERT INTO public.permiso (code, nombre) VALUES ('verUsuarios', 'Ver Usuarios');
+INSERT INTO public.permiso (code, nombre) VALUES ('crudUsuarios', 'CRUD Usuarios');
+
 --Permisos a Rol
 SELECT * FROM public.permiso_rol ORDER BY id ASC;
 --ADMIN

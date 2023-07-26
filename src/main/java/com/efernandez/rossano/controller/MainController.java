@@ -22,4 +22,14 @@ public class MainController {
         return "home";
     }
 
+    @GetMapping("/error")
+    public String errorPage() {
+        return "404";
+    }
+
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login";
+    }
+
 }

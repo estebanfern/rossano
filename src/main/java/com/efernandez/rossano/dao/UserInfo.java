@@ -41,7 +41,7 @@ public class UserInfo implements UserDetails, Serializable {
     private Boolean enabled;
     @Column(nullable = true, unique = true)
     private String token;
-    @Column(nullable = true, unique = true)
+    @Column(nullable = true, unique = false)
     private String documento;
 
     @ManyToOne(optional = false)

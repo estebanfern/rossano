@@ -1,5 +1,6 @@
 package com.efernandez.rossano.bean;
 
+import com.efernandez.rossano.utils.PasswordGenerator;
 import com.efernandez.rossano.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,10 +19,12 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityBeans {
 
     private UserService userService;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public SecurityBeans(UserService userService) {
+    public SecurityBeans(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Bean
@@ -30,7 +33,7 @@ public class SecurityBeans {
                 .authorizeHttpRequests(auth -> auth //.anyRequest().permitAll());
                         //Public endpoints
                         .requestMatchers(
-                                "/css/**", "/img/**", "/js/**", "/error"
+                                "/css/**", "/img/**", "/js/**", "/error", "/plugins/**"
                         ).permitAll()
                         //Authenticated Endpoints
                         .requestMatchers(
@@ -38,7 +41,7 @@ public class SecurityBeans {
                         ).authenticated()
                         //Permisos de manipulación de usuarios
                         .requestMatchers(
-                                "/users"
+                                "/users", "users/search"
                         ).hasAuthority("verUsuarios")
                         .requestMatchers(
                                 "/users/save", "/users/save/*"
@@ -62,15 +65,10 @@ public class SecurityBeans {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userService);
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        authenticationProvider.setPasswordEncoder(passwordEncoder);
         return authenticationProvider;
     }
 

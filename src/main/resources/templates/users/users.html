@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{common/base::base}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rossano</title>
+</head>
+<body>
+    <!-- Aqui debe ir el contenido de la pagina -->
+    <main layout:fragment="contenido">
+        <div class="container-fluid px-4">
+            <h1 class="mt-4">Usuarios</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item active">Visualización</li>
+            </ol>
+            <div class="card">
+                <div class="card-header">
+                    <div class="col-12 d-flex flex-column align-items-end">
+                        <a id="newActaBtn" class="btn btn-secondary position-absolute" role="button" onclick="newUser()">
+                            <i class="fa-solid fa-user-plus"></i>
+                            Crear Usuario
+                        </a>
+                    </div>
+                    <h5 class="text-center mt-3">Filtros</h5>
+                    <div class="row my-3" id="tableMainFilters">
+                        <div class="form-group col-xl-2 col-md-6">
+                            <label for="name" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" value="" name="nameFilter" id="nameFilter" placeholder="" />
+                        </div>
+                        <div class="form-group col-xl-4 col-md-6">
+                            <label for="name" class="form-label">Correo Electrónico</label>
+                            <input type="text" class="form-control" value="" name="emailFilter" id="emailFilter" placeholder="" />
+                        </div>
+                        <div class="form-group col-xl-2 col-md-6">
+                            <label for="name" class="form-label">Rol</label>
+                            <select class="form-select" name="rolFilter" id="rolFilter" placeholder="">
+                                <optgroup>
+                                    <option selected value="">No filtrar</option>
+                                </optgroup>
+                                <optgroup label="Roles" id="rolesGroup">
+                                    <option th:each="rol : ${roles}" th:value="${rol.code}" th:text="${rol.nombre}"></option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="form-group col-xl-3 col-md-6">
+                            <label for="name" class="form-label">Nro. Documento (Cliente)</label>
+                            <input type="text" class="form-control" value="" name="documentoFilter" id="documentoFilter" placeholder="" />
+                        </div>
+                        <div class="form-group col-xl-1 col-md-12 d-flex flex-column align-items-start mt-auto">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button class="btn btn-light btn-lg btn-outline-dark px-1" id="clearBtn" title="Limpiar filtros y criterios de orden">
+                                    <span class="fas fa-broom px-1"></span>
+                                </button>
+                                <button class="btn btn-light btn-lg btn-outline-dark px-1" id="searchBtn" title="Buscar / Actualizar">
+                                    <span class="fas fa-search px-1"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table id="tableMain" class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr class="table-secondary">
+                                <th>Nombre</th>
+                                <th>Correo Electrónico</th>
+                                <th>Rol</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <script>
+            var table;
+            var searchingDialog;
+            var details;
+            var saved;
+            var roles = [];
+            $(document).ready(() => {
+
+                let opts = document.querySelector('#rolesGroup').children;
+                for (let k = 0; k < opts.length; k++) {
+                    roles.push({
+                        val : opts[k].value,
+                        display : opts[k].text
+                    });
+                }
+
+                table = $("#tableMain").DataTable({
+                    ordering : false,
+                    searching : true,
+                    processing : true,
+                    serverSide : true,
+                    responsive : true,
+                    dom : "<'row'<'col-sm-12 col-md-auto'l><'col-sm-12 col-md-auto'I>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                    ajax : {
+                        url : "/users/search",
+                        data : function(d) {
+                            d.draw = d.draw;
+                            d.start = d.start;
+                            d.length = d.length;
+                            d.nameFilter = $('#nameFilter').val(); // Obtener valor del campo fechaInicio
+                            d.emailFilter = $('#emailFilter').val(); // Obtener valor del campo fechaFin
+                            d.rolFilter = $('#rolFilter').val(); // Obtener valor del campo categoria
+                            d.documentoFilter = $('#documentoFilter').val(); // Obtener valor del campo descripcion
+                        },
+                        dataSrc : function (json) {
+                            json.recordsTotal = json.recordsTotal;
+                            json.recordsFiltered = json.recordsFiltered;
+                            return json.data;
+                        }
+                    },
+                    // Crea espacio adicional cuando la última página no llena el límite de entradas
+                    drawCallback: function (oSettings) {
+                        // Adaptado de: https://datatables.net/forums/discussion/44050/fixed-table-height-on-last-page
+                        let total_count = oSettings.fnRecordsTotal();
+                        let show_num = oSettings._iDisplayLength;
+                        let tbody = $(this).children('tbody');
+                        let tr_count = tbody.children('tr').length;
+                        let missing = show_num - tr_count;
+                        if (show_num < total_count && missing > 0) {
+                            let lastRowHeight = tbody.find('tr:last-child').height();
+                            $('<tr/>').appendTo(tbody).height(lastRowHeight * missing);
+                        }
+                    },
+                    columns : [
+                        {
+                            data : "name",
+                            className : "text-center",
+                        },
+                        {
+                            data : "email",
+                            className : "text-center"
+                        },
+                        {
+                            data : "rolName",
+                            render : function(data, type, row) {
+                                return data;
+                            }
+                        },
+                        {
+                            data : function(row, type, set) {
+                                return {
+                                    id : row.id,
+                                };
+                            },
+                            render : function(data, type, row) {
+                                let dom = `<div class="btn-group btn-group-xs" role="group">`;
+                                
+                                dom +=     `<a role="button" href="#" class="btn btn-light btn-outline-dark px-1" onclick="getDetails(${data.id})" title="Detalles">
+                                                <span class="fas fa-fw fa-eye">
+                                                </span>
+                                            </a>`
+                                dom += `<a role="button" href="/users/save/${data.id}" class="btn btn-light btn-outline-dark px-1" title="Editar"><span class="fas fa-fw fa-pencil-alt"></span></a>`;
+                                dom += `<a role="button" href="/users/delete/${data.id}" target="_blank" class="btn btn-light btn-outline-dark px-1" title="Eliminar"><span class="fas fa-trash"></span></a></div>`
+                                return dom;
+                            }
+                        }
+                    ],
+                    language: {
+                        url : "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+                    }
+                });
+                
+                // Agregar evento change a los campos de entrada
+                $('#nameFilter, #emailFilter, #rolFilter, #documentoFilter').on('change', function () {
+                    table.draw(); // Volver a cargar los datos del DataTable con los nuevos parámetros de búsqueda
+                });
+
+                $('#clearBtn').on('click', clear);
+                $('#searchBtn').on('click', search);
+
+            });
+
+            function search() {
+                table.draw();
+            }
+
+            function clear() {
+                $('#nameFilter').val("");
+                $('#emailFilter').val("");
+                $('#rolFilter').val("");
+                $('#documentoFilter').val("");
+                search();
+            }
+
+            function newUser() {
+                saveUser('Crear Usuario', new Object());
+            }
+
+            function getRoles() {
+                let ret = "";
+                roles.forEach(rol => {
+                    ret += `<option value="${rol.val}">${rol.display}</option>`;
+                });
+                return ret;
+            }
+
+            function updateDocumentoInput(sel) {
+                if (sel.value === 'ROLE_USER') {
+                    $('#documento').prop('readonly', false);
+                    $('#documento').prop('disabled', false);
+                    $('#documento').prop('required', true);
+                    return;
+                }
+                $('#documento').prop('readonly', true);
+                $('#documento').prop('disabled', true);
+                $('#documento').prop('required', false);
+                $('#documento').val('');
+            }
+
+            function saveUser(title, data) {
+                saved = bootbox.dialog({
+                    title : title,
+                    centerVertical: true,
+                    size: 'large',
+                    message :  `
+                    <form action="${data.id ? 'users/save/${data.id}' : 'users/save'}" id="saveUsrFrm" method="post">
+                        <div class="row">
+                            <input type="text" class="form-control" value="" name="id" id="id" placeholder="" hidden />
+                            <div class="form-group col-xl-6 col-md-12 mt-2">
+                                <label for="name" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" value="" name="name" id="name" placeholder="" required />
+                            </div>
+                            <div class="form-group col-xl-6 col-md-12 mt-2">
+                                <label for="rol" class="form-label">Rol</label>
+                                <select class="form-control" name="rol" id="rol" placeholder="" onchange="updateDocumentoInput(this)" required >
+                                    ${getRoles()}
+                                </select>
+                            </div>
+                            <div class="form-group col-xl-6 col-md-12 mt-2">
+                                <label for="email" class="form-label">Correo Electrónico</label>
+                                <input type="text" class="form-control" value="" name="email" id="email" placeholder="" required />
+                            </div>
+                            <div class="form-group col-xl-6 col-md-12 mt-2">
+                                <label for="documento" class="form-label">Documento (Solo para clientes)</label>
+                                <input type="text" class="form-control" value="" name="documento" id="documento" placeholder="" ${$('#rol').val() === 'ROLE_USER' ? 'required' : 'disabled' } />
+                            </div>
+                            <div class="form-group col-12 mt-3 text-center">
+                                <button class="btn btn-success" type="submit">
+                                    <i class="fa-solid fa-user-plus"></i>
+                                    Crear
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                                `,
+                    
+                });
+            }
+
+        </script>
+    </main>
+</body>
+</html>

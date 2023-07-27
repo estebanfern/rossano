@@ -25,3 +25,19 @@ window.addEventListener('DOMContentLoaded', event => {
     });
 
 });
+
+//Loader
+const sprinner = document.querySelector('.spinner-wrapper');
+window.addEventListener('load', () => {
+    sprinner.style.opacity = '0';
+    setTimeout(() => {
+        sprinner.style.display = 'none';
+    }, 200);
+});
+
+window.addEventListener('beforeunload', () => {
+    sprinner.style.opacity = '100';
+    setTimeout(() => {
+        sprinner.style.display = '';
+    }, 200);
+});

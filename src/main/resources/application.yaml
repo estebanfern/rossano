@@ -37,18 +37,17 @@ spring:
         strategy:
           content:
             enabled: true
-#    <-> SOON <->
-#  mail:
-#    host: smtp.gmail.com
-#    username: rossano@gmail.com
-#    password: ${scodp_email_password}
-#    port: 587
-#    properties:
-#      mail:
-#        smtp:
-#          starttls:
-#            enable: true
-#          auth: true
+  mail:
+    host: smtp.gmail.com
+    username: ${email_address}
+    password: ${email_password}
+    port: 587
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
 
 logging:
   file:

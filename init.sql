@@ -1,6 +1,6 @@
 --Rol
 SELECT * FROM public.rol ORDER BY code ASC;
-INSERT INTO public.rol (code, nombre) VALUES ('ROLE_ADMIN', 'Administrador General');
+INSERT INTO public.rol (code, nombre) VALUES ('ROLE_ADMIN', 'Administrador');
 INSERT INTO public.rol (code, nombre) VALUES ('ROLE_VENDEDOR', 'Vendedor');
 INSERT INTO public.rol (code, nombre) VALUES ('ROLE_USER', 'Usuario');
 
@@ -16,7 +16,6 @@ INSERT INTO public.permiso (code, nombre) VALUES ('editarClientes', 'Editar Clie
 INSERT INTO public.permiso (code, nombre) VALUES ('eliminarClientes', 'Editar Clientes');
 INSERT INTO public.permiso (code, nombre) VALUES ('pedidosGlobales', 'Consultar todos los pedidos');
 INSERT INTO public.permiso (code, nombre) VALUES ('facturar', 'Facturar');
-
 INSERT INTO public.permiso (code, nombre) VALUES ('verUsuarios', 'Ver Usuarios');
 INSERT INTO public.permiso (code, nombre) VALUES ('crudUsuarios', 'CRUD Usuarios');
 
@@ -33,6 +32,8 @@ INSERT INTO public.permiso_rol (permiso_code, rol_code) VALUES ('editarClientes'
 INSERT INTO public.permiso_rol (permiso_code, rol_code) VALUES ('eliminarClientes', 'ROLE_ADMIN');
 INSERT INTO public.permiso_rol (permiso_code, rol_code) VALUES ('pedidosGlobales', 'ROLE_ADMIN');
 INSERT INTO public.permiso_rol (permiso_code, rol_code) VALUES ('facturar', 'ROLE_ADMIN');
+INSERT INTO public.permiso_rol (permiso_code, rol_code) VALUES ('verUsuarios', 'ROLE_ADMIN');
+INSERT INTO public.permiso_rol (permiso_code, rol_code) VALUES ('crudUsuarios', 'ROLE_ADMIN');
 --VENDEDOR
 INSERT INTO public.permiso_rol (permiso_code, rol_code) VALUES ('consultarClientes', 'ROLE_VENDEDOR');
 --USER

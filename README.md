@@ -19,4 +19,5 @@ Para desplegar este proyecto, necesitas tener las siguiente variables de entorno
 `db_url`
 `db_username`
 `db_password`
+`email_password`
 

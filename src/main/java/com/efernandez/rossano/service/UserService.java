@@ -48,6 +48,13 @@ public class UserService implements UserDetailsService {
                 );
     }
 
+    public UserInfo findUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByEmail(username)
+                .orElseThrow(
+                        () -> new UsernameNotFoundException(String.format("Username with email %s not found", username))
+                );
+    }
+
     public Page<UserDTO> searchUsers(int start, int length,
                                      String nameFilter, String emailFilter, String rolFilter, String documentoFilter) {
         Page<UserDTO> users = userJdbc.searchUsers(start, length, nameFilter, emailFilter, rolFilter, documentoFilter);
@@ -74,4 +81,18 @@ public class UserService implements UserDetailsService {
         mailService.sendNewUserEmail(userdto.getEmail(), userdto.getName(), userdto.getEmail(), password);
         logger.info(String.format("Created User with email %s and generated password %s", userdto.getEmail(), password));
     }
+
+    public void updatePassword(String authname, String originalPassword, String newPassword) throws IllegalArgumentException{
+        UserInfo user = userRepository.findByEmail(authname).orElseThrow(() -> new IllegalArgumentException("Usuario inexistente."));
+        if (!passwordEncoder.matches(originalPassword, user.getPassword())) {
+            throw new IllegalArgumentException("Contraseña actual inválida.");
+        }
+        if (newPassword.length() < 6) {
+            throw new IllegalArgumentException("La contraseña debe tener mínimo 6 carácteres.");
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        logger.info(String.format("Updated password for user with email %s", authname));
+    }
+
 }

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{common/base::base}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rossano</title>
+</head>
+<body>
+    <!-- Aqui debe ir el contenido de la pagina -->
+    <main layout:fragment="contenido">
+        <div class="container-fluid px-4">
+            <h1 class="mt-4">Perfil</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item active" th:text="${userName}"></li>
+            </ol>
+            <div class="row">
+                <div class="col-lg-6 col-md-12 offset-lg-3 offset-md-0">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="text-center">Cambiar Contraseña</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <input type="text" class="form-control" value="" name="id" id="id" placeholder="" hidden />
+                                <div class="form-group col-12">
+                                    <label for="name" class="form-label">Contraseña actual</label>
+                                    <input type="password" class="form-control" value="" name="actualPass" id="actualPass" placeholder="" required />
+                                </div>
+                                <div class="form-group col-12">
+                                    <label for="name" class="form-label">Nueva Contraseña</label>
+                                    <input type="password" class="form-control" value="" name="newPass1" id="newPass1" placeholder="" required />
+                                    <small id="newPass1Help" class="font-weight-bold text-danger">Las contraseñas deben ser iguales.</small>
+                                </div>
+                                <div class="form-group col-12">
+                                    <label for="name" class="form-label">Repetir Nueva Contraseña</label>
+                                    <input type="password" class="form-control" value="" name="newPass2" id="newPass2" placeholder="" required />
+                                    <small id="newPass2Help" class="font-weight-bold text-danger">Las contraseñas deben ser iguales.</small>
+                                </div>
+                                <div class="form-group col-12 mt-3 text-center">
+                                    <button class="btn btn-success" type="button" onclick="validForm()">
+                                        <i class="fa-solid fa-key"></i>
+                                        Actualizar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            var searchingDialog;
+            $(document).ready(() => {
+                $('#newPass1Help').hide();
+                $('#newPass2Help').hide();
+            });
+
+            function validForm() {
+                let pass1 = $('#newPass1').val();
+                let pass2 = $('#newPass2').val();
+                if (pass1 === pass2) {
+                    $('#newPass1Help').hide();
+                    $('#newPass2Help').hide();
+                    changePassword($('#actualPass').val(), pass1);
+                    return true;
+                }else{
+                    $('#newPass1Help').show();
+                    $('#newPass2Help').show();
+                    event.preventDefault();
+                    event.stopPropagation();
+                    return false;
+                }
+            }
+
+            function changePassword(originalPassword, newPassword) {
+                searchingDialog = bootbox.dialog({
+                    message: '<p class="text-center mb-0"><i class="fas fa-spin fa-spinner"></i> Cargando...</p>',
+                    closeButton: false,
+                    centerVertical: true
+                }).on('shown.bs.modal', function(){
+                    $.ajax({
+                        url : `/profile/update-password?originalPassword=${originalPassword}&newPassword=${newPassword}`,
+                        method : 'post',
+                        success : function(data) {
+                            searchingDialog.modal('hide');
+                            bootbox.dialog({
+                                title: '<i class="fa-solid fa-circle-check text-success"></i> Resultado exitoso',
+                                message: 'Contraseña actualizada satisfactoriamente.',
+                                centerVertical: true,
+                                buttons: {
+                                    ok: {
+                                        label: 'Ok', 
+                                        className: 'btn btn-success'
+                                    }
+                                }
+                            });                        },
+                        error : function(data) {
+                            searchingDialog.modal('hide');
+                            bootbox.dialog({
+                                title: '<i class="fa-solid fa-circle-exclamation text-danger"></i> Ocurrió un error inesperado',
+                                message: data.responseJSON.message,
+                                centerVertical: true,
+                                buttons: {
+                                    ok: {
+                                        label: 'Ok', 
+                                        className: 'btn btn-secondary'
+                                    }
+                                }
+                            });
+                        }
+                    })
+                });
+            }
+
+        </script>
+    </main>
+</body>
+</html>

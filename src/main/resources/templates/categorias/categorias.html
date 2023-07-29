@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{common/base::base}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rossano</title>
+</head>
+<body>
+    <!-- Aqui debe ir el contenido de la pagina -->
+    <main layout:fragment="contenido">
+        <div class="container-fluid px-4">
+            <h1 class="mt-4">Categorias</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item active">Manipulación de Categorias de Productos</li>
+            </ol>
+            <div class="row">
+                <div class="col-lg-6 col-md-12 my-2">
+                    <div class="card shadow">
+                        <div class="card-header text-center">
+                            <h5 class="font-weight-bold text-dark">Listado de Categorias</h5>
+                        </div>
+                        <div class="card-body">
+                            <table id="tableMain" class="table table-bordered table-striped table-hover">
+                                <thead>
+                                    <tr class="table-secondary">
+                                        <th>Código</th>
+                                        <th>Nombre</th>
+                                        <th>Opciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-group-divider">
+                                    <tr th:each="categoria : ${categorias}">
+                                        <td th:text="${categoria.code}"></td>
+                                        <td th:text="${categoria.nombre}" th:id="'categoria' + ${categoria.code}"></td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm" th:attr="onclick=|editCat('${categoria.code}')|">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <a th:href="@{/categorias/delete/{id}(id=${categoria.code})}" class="btn btn-danger btn-sm">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12 my-2">
+                    <div class="card shadow mb-4 text-center">
+                        <div class="card-header text-center">
+                            <h5 class="font-weight-bold text-dark" id="categoriaFormTitle">Crear Categoria</h5>
+                        </div>
+                        <div class="card-body">
+                            <form th:action="@{/categorias/save}" class="text-left" method="post">
+                                <div class="mt-3">
+                                    <label for="id_categoria" class="form-label">ID de la Categoria</label>
+                                    <input type="text" class="form-control" name="code" id="code" required>
+                                    <small id="helpdId" class="form-text text-muted">Código de la Categoria.</small>
+                                </div>
+                                <div class="mt-3">
+                                    <label for="id_categoria" class="form-label">Nombre de la Categoria</label>
+                                    <input type="text" class="form-control" name="nombre" id="nombre" required>
+                                    <small id="helpdCategoria" class="form-text text-muted">Nombre de la Categoria</small>
+                                </div>
+                                <div class="text-center mt-3">
+                                    <button type="button" class="btn btn-warning" id="cancelBtn" onclick="resetCategoriaForm()">Cancelar</button>
+                                    <button type="submit" class="btn btn-primary">Enviar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+
+            var principalTitle;
+            
+            $(document).ready(() => {
+                principalTitle = $('#categoriaFormTitle');
+                $('#cancelBtn').hide();
+            });
+
+            function resetCategoriaForm() {
+                principalTitle.text("Crear Categoria");
+                $('#code').val('');
+                $('#nombre').val('');
+                $('#cancelBtn').hide();
+            }
+            
+            function editCat(id) {
+                principalTitle.text("Editar Categoria");
+                $('#code').val(id);
+                $('#nombre').val($('#categoria' + id).text());
+                $('#cancelBtn').show();
+            }
+        </script>
+    </main>
+</body>
+</html>

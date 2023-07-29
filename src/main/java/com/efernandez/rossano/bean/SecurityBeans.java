@@ -44,7 +44,12 @@ public class SecurityBeans {
                         .requestMatchers(
                                 "/users/save", "/users/save/*"
                         ).hasAuthority("crudUsuarios")
-
+                        .requestMatchers(
+                                "/categorias"
+                        ).hasAuthority("verCategorias")
+                        .requestMatchers(
+                                "/categorias/save", "/categorias/delete/*"
+                        ).hasAuthority("crudCategorias")
                 ).formLogin(login -> login
                         .loginPage("/login")
                         .permitAll()

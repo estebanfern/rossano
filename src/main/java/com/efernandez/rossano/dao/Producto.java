@@ -1,8 +1,7 @@
 package com.efernandez.rossano.dao;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,4 +25,10 @@ public class Producto {
     private Long precioFinal;
     @Column(nullable = false)
     private String cat;
+
+    @ManyToOne(optional = false)
+    @JsonManagedReference
+    @JoinColumn(name = "cat", referencedColumnName = "code", insertable = false, updatable = false)
+    private Categoria categoria;
+
 }

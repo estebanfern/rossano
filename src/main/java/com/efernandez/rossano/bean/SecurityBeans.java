@@ -35,7 +35,7 @@ public class SecurityBeans {
                         ).permitAll()
                         //Authenticated Endpoints
                         .requestMatchers(
-                                "/", "profile", "profile/**"
+                                "/", "profile", "profile/**", "/productos"
                         ).authenticated()
                         //Permisos de manipulación de usuarios
                         .requestMatchers(

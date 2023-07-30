@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.efernandez</groupId>
 	<artifactId>rossano</artifactId>
-	<version>1.0.0</version>
+	<version>1</version>
 	<name>rossano</name>
 	<description>Rossano Web Admin</description>
 	<properties>
@@ -83,6 +83,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-freemarker</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-model</artifactId>
+			<version>3.9.3</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -97,6 +102,18 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.0</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>com.efernandez.rossano.RossanoApplication</mainClass>
+						</manifest>
+					</archive>
 				</configuration>
 			</plugin>
 		</plugins>

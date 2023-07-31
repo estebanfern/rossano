@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  rossanoadmin:
+    container_name: rossanoadmin
+    image: estebanfern/rossanoadmin:1.0.0
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "500m"
+        max-file: "2"
+    ports:
+      - "8089:8089"
+    env_file:
+      - rossano.env

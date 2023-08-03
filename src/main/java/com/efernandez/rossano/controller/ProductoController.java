@@ -1,5 +1,6 @@
 package com.efernandez.rossano.controller;
 
+import com.efernandez.rossano.dao.Producto;
 import com.efernandez.rossano.service.CategoriaService;
 import com.efernandez.rossano.service.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,13 @@ public class ProductoController {
     public String productosView(Model model) {
         model.addAttribute("categorias", categoriaService.findAll());
         return "productos/productos";
+    }
+
+    @GetMapping("/save")
+    public String saveNewProduct(Model model) {
+        model.addAttribute("producto", new Producto());
+        model.addAttribute("categorias", categoriaService.findAll());
+        return "productos/saveProducto";
     }
 
 }

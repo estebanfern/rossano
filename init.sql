@@ -6,9 +6,7 @@ INSERT INTO public.rol (code, nombre) VALUES ('ROLE_USER', 'Usuario');
 
 --Permisos
 SELECT * FROM public.permiso ORDER BY code ASC;
-INSERT INTO public.permiso (code, nombre) VALUES ('crearProductos', 'Crear Productos');
-INSERT INTO public.permiso (code, nombre) VALUES ('editarProductos', 'Editar Productos');
-INSERT INTO public.permiso (code, nombre) VALUES ('eliminarProductos', 'Eliminar Productos');
+INSERT INTO public.permiso (code, nombre) VALUES ('crudProductos', 'CRUD Productos');
 INSERT INTO public.permiso (code, nombre) VALUES ('hacerPedidos', 'Hacer Pedidos');
 INSERT INTO public.permiso (code, nombre) VALUES ('consultarClientes', 'Consultar Clientes');
 INSERT INTO public.permiso (code, nombre) VALUES ('registrarClientes', 'Registrar Clientes');
@@ -24,9 +22,7 @@ INSERT INTO public.permiso (code, nombre) VALUES ('crudCategorias', 'CRUD Catego
 --Permisos a Rol
 SELECT * FROM public.permiso_rol ORDER BY id ASC;
 --ADMIN
-INSERT INTO public.permiso_rol (permiso_code, rol_code) VALUES ('crearProductos', 'ROLE_ADMIN');
-INSERT INTO public.permiso_rol (permiso_code, rol_code) VALUES ('editarProductos', 'ROLE_ADMIN');
-INSERT INTO public.permiso_rol (permiso_code, rol_code) VALUES ('eliminarProductos', 'ROLE_ADMIN');
+INSERT INTO public.permiso_rol (permiso_code, rol_code) VALUES ('crudProductos', 'ROLE_ADMIN');
 INSERT INTO public.permiso_rol (permiso_code, rol_code) VALUES ('hacerPedidos', 'ROLE_ADMIN');
 INSERT INTO public.permiso_rol (permiso_code, rol_code) VALUES ('consultarClientes', 'ROLE_ADMIN');
 INSERT INTO public.permiso_rol (permiso_code, rol_code) VALUES ('registrarClientes', 'ROLE_ADMIN');

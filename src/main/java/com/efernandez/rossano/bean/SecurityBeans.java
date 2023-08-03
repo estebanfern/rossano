@@ -50,6 +50,9 @@ public class SecurityBeans {
                         .requestMatchers(
                                 "/categorias/save", "/categorias/delete/*"
                         ).hasAuthority("crudCategorias")
+                        .requestMatchers(
+                                "/productos/save","/productos/save/*", "/productos/delete/*"
+                        ).hasAuthority("crudProductos")
                 ).formLogin(login -> login
                         .loginPage("/login")
                         .permitAll()

@@ -15,7 +15,52 @@
             </ol>
             <div class="card shadow my-2">
                 <div class="card-header">
-                    
+                    <div class="col-12 d-flex flex-column align-items-end">
+                        <a id="newProductBtn" class="btn btn-secondary position-absolute" th:href="@{/productos/save}">
+                            <i class="fa-solid fa-plus"></i>
+                            Crear Producto
+                        </a>
+                    </div>
+                    <h5 class="text-center mt-3">Filtros</h5>
+                    <div class="row my-3" id="tableMainFilters">
+                        <div class="form-group col-xl-2 col-md-6 mt-auto py-2">
+                            <label for="name" class="form-label">Código de Barra</label>
+                            <input type="text" class="form-control" value="" name="codeFilter" id="codeFilter" placeholder="" />
+                        </div>
+                        <div class="form-group col-xl-2 col-md-6 mt-auto py-2">
+                            <label for="name" class="form-label">Código Interno</label>
+                            <input type="text" class="form-control" value="" name="internalFilter" id="codeFilter" placeholder="" />
+                        </div>
+                        <div class="form-group col-xl-2 col-md-6 mt-auto py-2">
+                            <label for="name" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" value="" name="nameFilter" id="nameFilter" placeholder="" />
+                        </div>
+                        <div class="form-group col-xl-2 col-md-6 mt-auto py-2">
+                            <label for="name" class="form-label">Categoría</label>
+                            <select class="form-select" name="catFilter" id="catFilter" placeholder="">
+                                <optgroup>
+                                    <option selected value="">No filtrar</option>
+                                </optgroup>
+                                <optgroup label="Roles" id="rolesGroup">
+                                    <option th:each="cat : ${categorias}" th:value="${cat.code}" th:text="${cat.nombre}"></option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="form-group col-xl-3 col-md-6 mt-auto py-2">
+                            <label for="name" class="form-label">Descripción</label>
+                            <input type="text" class="form-control" value="" name="descFilter" id="descFilter" placeholder="" />
+                        </div>
+                        <div class="form-group col-xl-1 col-md-12 d-flex flex-column align-items-center mt-auto py-3">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button class="btn btn-light btn-lg btn-outline-dark px-1" id="clearBtn" title="Limpiar filtros y criterios de orden">
+                                    <span class="fas fa-broom px-1"></span>
+                                </button>
+                                <button class="btn btn-light btn-lg btn-outline-dark px-1" id="searchBtn" title="Buscar / Actualizar">
+                                    <span class="fas fa-search px-1"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>             
                 </div>
                 <div class="card-body">
                     

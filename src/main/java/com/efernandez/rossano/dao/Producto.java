@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 public class Producto {
     @Id
     private String codigoBarra;
+    @Column(nullable = true, unique = true)
+    private String codigoInterno;
     @Column(nullable = false)
     private String nombre;
     @Column(nullable = false)

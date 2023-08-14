@@ -27,7 +27,7 @@
                     <form th:action="@{/productos/save}" method="post" class="row">
                         <div class="form-group col-xl-4 col-md-6 mt-auto py-2">
                             <label for="name" class="form-label">Código de Barra (*)</label>
-                            <input type="text" class="form-control" th:value="${producto.codigoBarra}" name="codigoBarra" id="codigoBarra" placeholder="" required />
+                            <input type="text" class="form-control" th:readonly="${producto.codigoBarra != null ? 'true' : 'false'}" th:value="${producto.codigoBarra}" name="codigoBarra" id="codigoBarra" placeholder="" required />
                         </div>
                         <div class="form-group col-xl-4 col-md-6 mt-auto py-2">
                             <label for="name" class="form-label">Código Interno</label>
@@ -40,9 +40,7 @@
                         <div class="form-group col-xl-4 col-md-6 mt-auto py-2">
                             <label for="name" class="form-label">Categoría (*)</label>
                             <select class="form-select" name="cat" id="cat" placeholder="" required>
-                                <optgroup>
-                                    <option value="">Ninguno seleccionado</option>
-                                </optgroup>
+                                <option disabled th:selected="${producto != null}" value="">Seleccione una opción</option>
                                 <optgroup label="Roles" id="rolesGroup">
                                     <option th:each="cat : ${categorias}" th:value="${cat.code}" th:selected="${producto.cat == cat.code}" th:text="${cat.nombre}"></option>
                                 </optgroup>
@@ -62,7 +60,7 @@
                         </div>
                         <div class="form-group col-xl-8 col-md-12 mt-auto py-2">
                             <label for="name" class="form-label">Descripción (*)</label>
-                            <textarea class="form-control" rows="1" name="descripcion" id="descripcion" maxlength="250" th:value="${producto.descripcion}" required ></textarea>
+                            <textarea class="form-control" rows="1" name="descripcion" id="descripcion" maxlength="250" th:text="${producto.descripcion}" required ></textarea>
                         </div>
                         <div class="col-12 text-center mt-2">
                             <button type="submit" class="btn btn-success">

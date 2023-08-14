@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Service
 public class ProductoService {
@@ -41,4 +43,20 @@ public class ProductoService {
         productoRepository.deleteById(code);
     }
 
+    public Producto findById(String code) {
+        return productoRepository.findById(code).orElseThrow(
+                () -> new IllegalArgumentException(String.format("Prodcuto with codigo de barra %s not found.", code))
+                );
+    }
+
+    public String edit(Producto producto) {
+        Optional<Producto> other = productoRepository.findByCodigoInterno(producto.getCodigoInterno());
+        if (other.isPresent() && !other.get().getCodigoBarra().equals(producto.getCodigoBarra())) {
+            return String.format("Producto con Código de Interno %s ya existe.", producto.getCodigoBarra());
+        }else if (producto.getCat() == null || producto.getCat().isEmpty()) {
+            return String.format("Debes de seleccionar una Categoria.", producto.getCodigoBarra());
+        }
+        productoRepository.save(producto);
+        return "";
+    }
 }

@@ -84,4 +84,27 @@ public class ProductoController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/save/{code}")
+    public String editProductView(Model model,@PathVariable String code, @RequestParam(required = false) String error) {
+        model.addAttribute("producto", productoService.findById(code));
+        model.addAttribute("categorias", categoriaService.findAll());
+        if (error != null && !error.isEmpty()) {
+            model.addAttribute("errorMsg", URLDecoder.decode(error, StandardCharsets.UTF_8));
+        }
+        return "productos/saveProducto";
+    }
+
+    @PutMapping("/save/{code}")
+    public String editProduct(Model model, @PathVariable String code, Producto producto) {
+        String msg = productoService.edit(producto);
+        if (msg.isEmpty()) {
+            return "redirect:/productos?saved";
+        }else {
+            logger.info("User {} try to edit a product {}, error={}", SecurityContextHolder.getContext().getAuthentication().getName(), producto, msg);
+            model.addAttribute("producto", producto);
+            model.addAttribute("categorias", categoriaService.findAll());
+            return String.format("redirect:/productos/save/%s?error=%s",code, URLEncoder.encode(msg, StandardCharsets.UTF_8));
+        }
+    }
+
 }

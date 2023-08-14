@@ -29,7 +29,7 @@
                         </div>
                         <div class="form-group col-xl-2 col-md-6 mt-auto py-2">
                             <label for="name" class="form-label">Código Interno</label>
-                            <input type="text" class="form-control" value="" name="internalFilter" id="codeFilter" placeholder="" />
+                            <input type="text" class="form-control" value="" name="internalFilter" id="internalFilter" placeholder="" />
                         </div>
                         <div class="form-group col-xl-2 col-md-6 mt-auto py-2">
                             <label for="name" class="form-label">Nombre</label>
@@ -41,7 +41,7 @@
                                 <optgroup>
                                     <option selected value="">No filtrar</option>
                                 </optgroup>
-                                <optgroup label="Roles" id="rolesGroup">
+                                <optgroup label="Categorias" id="catsGroup">
                                     <option th:each="cat : ${categorias}" th:value="${cat.code}" th:text="${cat.nombre}"></option>
                                 </optgroup>
                             </select>
@@ -63,10 +63,190 @@
                     </div>             
                 </div>
                 <div class="card-body">
-                    
+                    <table id="tableMain" class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr class="table-secondary">
+                                <th>Código de Barra</th>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Precio Final</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+        <script>
+            var table;
+            var searchingDialog;
+            var details;
+            var saved;
+            var categorias = {};
+            $(document).ready(() => {
+
+                let opts = document.querySelector('#catsGroup').children;
+                for (let k = 0; k < opts.length; k++) {
+                    categorias[opts[k].value] = {
+                        val : opts[k].value,
+                        display : opts[k].text
+                    };
+                }
+
+                table = $("#tableMain").DataTable({
+                    ordering : false,
+                    searching : true,
+                    processing : true,
+                    serverSide : true,
+                    responsive : true,
+                    dom : "<'row'<'col-sm-12 col-md-auto'l><'col-sm-12 col-md-auto'I>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                    ajax : {
+                        url : "/productos/search",
+                        data : function(d) {
+                            d.draw = d.draw;
+                            d.start = d.start;
+                            d.length = d.length;
+                            d.codeFilter = $('#codeFilter').val(); // Obtener valor del campo codigo de barra
+                            d.internalFilter = $('#internalFilter').val(); // Obtener valor del campo codigo interno
+                            d.nameFilter = $('#nameFilter').val(); // Obtener valor del campo nombre
+                            d.catFilter = $('#catFilter').val(); // Obtener valor del campo categoria
+                            d.descFilter = $('#descFilter').val(); // Obtener valor del campo descripcion
+                        },
+                        dataSrc : function (json) {
+                            json.recordsTotal = json.recordsTotal;
+                            json.recordsFiltered = json.recordsFiltered;
+                            return json.data;
+                        },
+                        error : function(data) {
+                            console.log(data);
+                            alert(data.responseText);
+                        }
+                    },
+                    // Crea espacio adicional cuando la última página no llena el límite de entradas
+                    drawCallback: function (oSettings) {
+                        // Adaptado de: https://datatables.net/forums/discussion/44050/fixed-table-height-on-last-page
+                        let total_count = oSettings.fnRecordsTotal();
+                        let show_num = oSettings._iDisplayLength;
+                        let tbody = $(this).children('tbody');
+                        let tr_count = tbody.children('tr').length;
+                        let missing = show_num - tr_count;
+                        if (show_num < total_count && missing > 0) {
+                            let lastRowHeight = tbody.find('tr:last-child').height();
+                            $('<tr/>').appendTo(tbody).height(lastRowHeight * missing);
+                        }
+                    },
+                    columns : [
+                        {
+                            data : "codigoBarra",
+                            className : "text-center",
+                        },
+                        {
+                            data : "nombre",
+                            render : function(data, type, row) {
+                                return data;
+                            }
+                        },
+                        {
+                            data : "descripcion",
+                            render : function(data, type, row) {
+                                let max = 40;
+                                return data.length < max ? data : data.substring(0, max);
+                            }
+                        },
+                        {
+                            data : "precioFinal",
+                            className : "text-center"
+                        },
+                        {
+                            data : function(row, type, set) {
+                                return {
+                                    codigoBarra : row.codigoBarra,
+                                };
+                            },
+                            render : function(data, type, row) {
+                                let dom = `<div class="btn-group btn-group-xs" role="group">`;
+                                
+                                dom +=     `<a role="button" href="#" class="btn btn-light btn-outline-dark px-1" onclick="getDetails(${data.codigoBarra})" title="Detalles">
+                                                <span class="fas fa-fw fa-eye">
+                                                </span>
+                                            </a>`
+                                dom += `<a role="button" href="/users/save/${data.codigoBarra}" class="btn btn-light btn-outline-dark px-1" title="Editar"><span class="fas fa-fw fa-pencil-alt"></span></a>`;
+                                dom += `<a role="button" onclick="deleteProducto('${data.codigoBarra}')" class="btn btn-light btn-outline-dark px-1" title="Eliminar"><span class="fas fa-trash"></span></a></div>`
+                                return dom;
+                            }
+                        }
+                    ],
+                    language: {
+                        url : "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+                    }
+                });
+                
+                // Agregar evento change a los campos de entrada
+                $('#codeFilter, #internalFilter, #nameFilter, #catFilter, #descFilter').on('change', function () {
+                    table.draw(); // Volver a cargar los datos del DataTable con los nuevos parámetros de búsqueda
+                });
+
+                $('#clearBtn').on('click', clear);
+                $('#searchBtn').on('click', search);
+
+            });
+
+            function deleteProducto(code) {
+                console.log(code);
+                bootbox.confirm({
+                    message: 'Estas seguro que deseas eliminar este producto?',
+                    centerVertical: true,
+                    title : '<i class="fa-solid fa-circle-exclamation text-danger"></i> Confirmación',
+                    buttons: {
+                        confirm: {
+                            label: '<span class="fas fa-trash"></span> Eliminar',
+                            className: 'btn-danger'
+                        },
+                            cancel: {
+                            label: 'Cancelar',
+                            className: 'btn-secondary'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.ajax({
+                                url : '/productos/' + code,
+                                method : 'delete',
+                                success : function(data) {
+                                    bootbox.alert({
+                                        title : '<i class="fa-solid fa-check"></i> Proceso exitoso',
+                                        message: 'Producto eliminado correctamente.',
+                                        size: 'small',
+                                        centerVertical : true
+                                    });
+                                    search();
+                                },
+                                error : function(response) {
+                                    alert(response.responseText);
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+
+            function search() {
+                table.draw();
+            }
+
+            function clear() {
+                $('#codeFilter').val("");
+                $('#internalFilter').val("");
+                $('#nameFilter').val("");
+                $('#catFilter').val("");
+                $('#descFilter').val("");
+                search();
+            }
+
+        </script>
     </main>
 </body>
 </html>

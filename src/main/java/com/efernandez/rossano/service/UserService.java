@@ -57,8 +57,7 @@ public class UserService implements UserDetailsService {
 
     public Page<UserDTO> searchUsers(int start, int length,
                                      String nameFilter, String emailFilter, String rolFilter, String documentoFilter) {
-        Page<UserDTO> users = userJdbc.searchUsers(start, length, nameFilter, emailFilter, rolFilter, documentoFilter);
-        return users;
+        return userJdbc.searchUsers(start, length, nameFilter, emailFilter, rolFilter, documentoFilter);
     }
 
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)

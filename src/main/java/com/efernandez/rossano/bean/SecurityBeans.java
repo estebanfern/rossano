@@ -30,30 +30,43 @@ public class SecurityBeans {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth //.anyRequest().permitAll());
-                        //Public endpoints
+                        /*
+                        * Public endpoints
+                        */
                         .requestMatchers(
                                 "/css/**", "/img/**", "/js/**", "/error", "/plugins/**"
                         ).permitAll()
-                        //Authenticated Endpoints
+                        /*
+                        * Authenticated Endpoints
+                        */
                         .requestMatchers(
-                                "/", "profile", "profile/**", "/productos"
+                                "/", "profile", "profile/**", "/productos", "/productos/search"
                         ).authenticated()
-                        //Permisos de manipulación de usuarios
+                        /*
+                        * Permisos de manipulación de usuarios
+                        */
                         .requestMatchers(
                                 "/users", "users/search"
                         ).hasAuthority("verUsuarios")
                         .requestMatchers(
                                 "/users/save", "/users/save/*"
                         ).hasAuthority("crudUsuarios")
+                        /*
+                        * Categorias
+                        */
                         .requestMatchers(
                                 "/categorias"
                         ).hasAuthority("verCategorias")
                         .requestMatchers(
                                 "/categorias/save", "/categorias/delete/*"
                         ).hasAuthority("crudCategorias")
+                        /*
+                        * Productos
+                        */
                         .requestMatchers(
-                                "/productos/save","/productos/save/*", "/productos/delete/*"
+                                "/productos/save","/productos/save/*", "/productos/*"
                         ).hasAuthority("crudProductos")
+
                 ).formLogin(login -> login
                         .loginPage("/login")
                         .permitAll()

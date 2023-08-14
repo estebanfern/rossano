@@ -13,6 +13,12 @@
             <ol class="breadcrumb mb-4">
                 <li class="breadcrumb-item active">Crear o Editar Producto</li>
             </ol>
+            <div th:if=${param.error} class="px-2 pt-2">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong th:text="${errorMsg}"></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
             <div class="card shadow my-2">
                 <div class="card-header text-center text-secondary">
                     Complete los campos obligatorios (*)
@@ -21,21 +27,21 @@
                     <form th:action="@{/productos/save}" method="post" class="row">
                         <div class="form-group col-xl-4 col-md-6 mt-auto py-2">
                             <label for="name" class="form-label">Código de Barra (*)</label>
-                            <input type="text" class="form-control" value="" name="codigoBarra" id="codigoBarra" placeholder="" required />
+                            <input type="text" class="form-control" th:value="${producto.codigoBarra}" name="codigoBarra" id="codigoBarra" placeholder="" required />
                         </div>
                         <div class="form-group col-xl-4 col-md-6 mt-auto py-2">
                             <label for="name" class="form-label">Código Interno</label>
-                            <input type="text" class="form-control" value="" name="codigoInterno" id="codigoInterno" placeholder="" />
+                            <input type="text" class="form-control" th:value="${producto.codigoInterno}" name="codigoInterno" id="codigoInterno" placeholder="" />
                         </div>
                         <div class="form-group col-xl-4 col-md-6 mt-auto py-2">
                             <label for="name" class="form-label">Nombre (*)</label>
-                            <input type="text" class="form-control" value="" name="nombre" id="nombre" placeholder="" required />
+                            <input type="text" class="form-control" th:value="${producto.nombre}" name="nombre" id="nombre" placeholder="" required />
                         </div>
                         <div class="form-group col-xl-4 col-md-6 mt-auto py-2">
                             <label for="name" class="form-label">Categoría (*)</label>
                             <select class="form-select" name="cat" id="cat" placeholder="" required>
                                 <optgroup>
-                                    <option selected value="">Ninguno seleccionado</option>
+                                    <option value="">Ninguno seleccionado</option>
                                 </optgroup>
                                 <optgroup label="Roles" id="rolesGroup">
                                     <option th:each="cat : ${categorias}" th:value="${cat.code}" th:selected="${producto.cat == cat.code}" th:text="${cat.nombre}"></option>
@@ -44,19 +50,19 @@
                         </div>
                         <div class="form-group col-xl-4 col-md-6 mt-auto py-2">
                             <label for="name" class="form-label">Existencia (*)</label>
-                            <input type="number" class="form-control" value="" name="existencia" id="existencia" placeholder="" onpaste="return false" onkeypress="onlyNumbers(event)"  required />
+                            <input type="number" class="form-control" th:value="${producto.existencia}" name="existencia" id="existencia" placeholder="" onpaste="return false" onkeypress="onlyNumbers(event)"  required />
                         </div>
                         <div class="form-group col-xl-4 col-md-6 mt-auto py-2">
                             <label for="name" class="form-label">Precio Costo (*)</label>
-                            <input type="number" class="form-control" value="" name="precioCosto" id="precioCosto" placeholder="" onpaste="return false" onkeypress="onlyNumbers(event)" required />
+                            <input type="number" class="form-control" th:value="${producto.precioCosto}" name="precioCosto" id="precioCosto" placeholder="" onpaste="return false" onkeypress="onlyNumbers(event)" required />
                         </div>
                         <div class="form-group col-xl-4 col-md-6 mt-auto py-2">
                             <label for="name" class="form-label">Precio Final (*)</label>
-                            <input type="number" class="form-control" value="" name="precioFinal" id="precioFinal" placeholder="" onpaste="return false" onkeypress="onlyNumbers(event)" required />
+                            <input type="number" class="form-control" th:value="${producto.precioFinal}" name="precioFinal" id="precioFinal" placeholder="" onpaste="return false" onkeypress="onlyNumbers(event)" required />
                         </div>
                         <div class="form-group col-xl-8 col-md-12 mt-auto py-2">
                             <label for="name" class="form-label">Descripción (*)</label>
-                            <textarea class="form-control" rows="1" name="descripcion" id="descripcion" maxlength="250" required ></textarea>
+                            <textarea class="form-control" rows="1" name="descripcion" id="descripcion" maxlength="250" th:value="${producto.descripcion}" required ></textarea>
                         </div>
                         <div class="col-12 text-center mt-2">
                             <button type="submit" class="btn btn-success">

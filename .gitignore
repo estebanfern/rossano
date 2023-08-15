@@ -35,3 +35,6 @@ build/
 ### Logging ###
 *.log
 *.log.*.gz
+
+*.bat
+*.sh

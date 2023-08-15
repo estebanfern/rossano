@@ -40,7 +40,7 @@ public class SecurityBeans {
                         * Authenticated Endpoints
                         */
                         .requestMatchers(
-                                "/", "profile", "profile/**", "/productos", "/productos/search"
+                                "/", "profile", "profile/**", "/productos", "/productos/search", "/pedidos"
                         ).authenticated()
                         /*
                         * Permisos de manipulación de usuarios
@@ -66,6 +66,12 @@ public class SecurityBeans {
                         .requestMatchers(
                                 "/productos/save","/productos/save/*", "/productos/*"
                         ).hasAuthority("crudProductos")
+                        /*
+                        * Pedidos
+                        */
+                        .requestMatchers(
+                                "/pedidos/updateStatus"
+                        ).hasAuthority("updatePedidos")
 
                 ).formLogin(login -> login
                         .loginPage("/login")

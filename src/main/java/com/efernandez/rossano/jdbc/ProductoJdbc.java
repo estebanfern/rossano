@@ -31,19 +31,19 @@ public class ProductoJdbc {
         String finalQuery = " ORDER BY codigo_barra DESC LIMIT ? OFFSET ?";
         String extraParams = "";
         if (codeFilter != null && !codeFilter.isEmpty()) {
-            extraParams += String.format(" AND prd.codigo_barra LIKE '%%%s%%'", codeFilter);
+            extraParams += String.format(" AND UPPER(prd.codigo_barra) LIKE '%%%s%%'", codeFilter.toUpperCase());
         }
         if (internalFilter != null && !internalFilter.isEmpty()) {
-            extraParams += String.format(" AND prd.codigo_interno LIKE '%%%s%%'", internalFilter);
+            extraParams += String.format(" AND UPPER(prd.codigo_interno) LIKE '%%%s%%'", internalFilter.toUpperCase());
         }
         if (nameFilter != null && !nameFilter.isEmpty()) {
-            extraParams += String.format(" AND prd.nombre LIKE '%%%s%%'", nameFilter);
+            extraParams += String.format(" AND UPPER(prd.nombre) LIKE '%%%s%%'", nameFilter.toUpperCase());
         }
         if (catFilter != null && !catFilter.isEmpty()) {
             extraParams += String.format(" AND prd.cat = '%s'", catFilter);
         }
         if (descFilter != null && !descFilter.isEmpty()) {
-            extraParams += String.format(" AND prd.descripcion LIKE '%%%s%%'", descFilter);
+            extraParams += String.format(" AND UPPER(prd.descripcion) LIKE '%%%s%%'", descFilter.toUpperCase());
         }
         query = query + extraParams + finalQuery;
         Object[] params = {length, start};

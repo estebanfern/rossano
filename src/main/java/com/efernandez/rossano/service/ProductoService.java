@@ -1,11 +1,13 @@
 package com.efernandez.rossano.service;
 
+import com.efernandez.rossano.config.RossanoConfig;
 import com.efernandez.rossano.dao.Producto;
 import com.efernandez.rossano.jdbc.ProductoJdbc;
 import com.efernandez.rossano.repository.ProductoRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -13,14 +15,16 @@ import java.util.Optional;
 
 @Service
 public class ProductoService {
-
+    private static final Logger logger = LoggerFactory.getLogger(ProductoService.class);
     private final ProductoRepository productoRepository;
     private final ProductoJdbc productoJdbc;
+    private final RossanoConfig rossanoConfig;
 
     @Autowired
-    public ProductoService(ProductoRepository productoRepository, ProductoJdbc productoJdbc) {
+    public ProductoService(ProductoRepository productoRepository, ProductoJdbc productoJdbc, RossanoConfig rossanoConfig) {
         this.productoRepository = productoRepository;
         this.productoJdbc = productoJdbc;
+        this.rossanoConfig = rossanoConfig;
     }
 
     public String save(Producto producto) {

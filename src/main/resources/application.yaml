@@ -21,7 +21,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: false
-    show-sql: false
+    show-sql: true
     open-in-view: false
   mvc:
     view:
@@ -48,14 +48,19 @@ spring:
           starttls:
             enable: true
           auth: true
-
 logging:
-  file:
-    name: rossano.log
-
+  #file:
+  #  name: rossano.log
   logback:
     rollingpolicy:
       max-file-size: 500MB
       max-history: 499
   level:
     root: info
+
+rossano:
+  iva:
+    "10" : 11
+    "5" : 21
+    "EX" : 1
+

@@ -29,6 +29,8 @@ public class Producto {
     private Long precioFinal;
     @Column(nullable = false)
     private String cat;
+    @Column(columnDefinition = "varchar(2); alter table if exists producto alter column iva set default '10';")
+    private String iva;
 
     @ManyToOne(optional = false)
     @JsonManagedReference

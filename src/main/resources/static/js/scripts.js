@@ -22,6 +22,10 @@ window.addEventListener('DOMContentLoaded', event => {
     var navsToActive = Array.from(allNavButtons).filter(n => n.getAttribute('href') === pathname);
     navsToActive.forEach((n) => {
         n.classList.add('active');
+        if (n.parentNode?.classList.contains('sb-sidenav-menu-nested')) {
+            n.parentNode.parentNode?.classList.add('show');
+            n.parentNode.parentNode?.parentNode?.classList.remove('collapsed');
+        }
     });
 
 });

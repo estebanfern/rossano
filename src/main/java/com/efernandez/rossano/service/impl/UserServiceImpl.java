@@ -1,16 +1,16 @@
-package com.efernandez.rossano.service;
+package com.efernandez.rossano.service.impl;
 
 import com.efernandez.rossano.dao.UserInfo;
 import com.efernandez.rossano.dto.UserDTO;
 import com.efernandez.rossano.jdbc.UserJdbc;
 import com.efernandez.rossano.repository.UserRepository;
+import com.efernandez.rossano.service.MailService;
+import com.efernandez.rossano.service.UserService;
 import com.efernandez.rossano.utils.PasswordGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,21 +18,20 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserJdbc userJdbc;
     private final PasswordGenerator passwordGenerator;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    @Autowired
-    public UserService(UserRepository userRepository,
-                       UserJdbc userJdbc,
-                       PasswordGenerator passwordGenerator,
-                       PasswordEncoder passwordEncoder,
-                       MailService mailService){
+    public UserServiceImpl(UserRepository userRepository,
+                           UserJdbc userJdbc,
+                           PasswordGenerator passwordGenerator,
+                           PasswordEncoder passwordEncoder,
+                           MailService mailService){
         this.userRepository = userRepository;
         this.userJdbc = userJdbc;
         this.passwordGenerator = passwordGenerator;

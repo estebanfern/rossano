@@ -1,7 +1,6 @@
 package com.efernandez.rossano.controller;
 
 import com.efernandez.rossano.service.CategoriaService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +11,6 @@ public class CategoriaController {
 
     private final CategoriaService categoriaService;
 
-    @Autowired
     public CategoriaController(CategoriaService categoriaService) {
         this.categoriaService = categoriaService;
     }

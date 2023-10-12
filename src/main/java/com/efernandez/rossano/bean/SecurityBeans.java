@@ -1,6 +1,6 @@
 package com.efernandez.rossano.bean;
 
-import com.efernandez.rossano.service.UserService;
+import com.efernandez.rossano.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,11 +17,11 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityBeans {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public SecurityBeans(UserService userService, PasswordEncoder passwordEncoder) {
+    public SecurityBeans(UserServiceImpl userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
     }

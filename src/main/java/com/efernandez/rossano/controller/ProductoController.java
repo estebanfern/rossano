@@ -6,8 +6,6 @@ import com.efernandez.rossano.service.CategoriaService;
 import com.efernandez.rossano.service.ProductoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 
 @Controller
@@ -28,7 +25,6 @@ public class ProductoController {
 
     private final Logger logger = LoggerFactory.getLogger(ProductoController.class);
 
-    @Autowired
     public ProductoController(ProductoService productoService, CategoriaService categoriaService) {
         this.productoService = productoService;
         this.categoriaService = categoriaService;

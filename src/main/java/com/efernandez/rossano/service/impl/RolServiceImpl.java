@@ -1,19 +1,19 @@
-package com.efernandez.rossano.service;
+package com.efernandez.rossano.service.impl;
 
 import com.efernandez.rossano.dao.Rol;
 import com.efernandez.rossano.repository.RolRepository;
+import com.efernandez.rossano.service.RolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class RolService {
+public class RolServiceImpl implements RolService {
 
     private final RolRepository rolRepository;
 
-    @Autowired
-    public RolService(RolRepository rolRepository) {
+    public RolServiceImpl(RolRepository rolRepository) {
         this.rolRepository = rolRepository;
     }
 

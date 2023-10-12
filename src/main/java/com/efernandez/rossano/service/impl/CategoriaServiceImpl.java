@@ -1,20 +1,19 @@
-package com.efernandez.rossano.service;
+package com.efernandez.rossano.service.impl;
 
 import com.efernandez.rossano.dao.Categoria;
 import com.efernandez.rossano.repository.CategoriaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.efernandez.rossano.service.CategoriaService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-public class CategoriaService {
+public class CategoriaServiceImpl implements CategoriaService {
 
     private final CategoriaRepository categoriaRepository;
 
-    @Autowired
-    public CategoriaService(CategoriaRepository categoriaRepository) {
+    public CategoriaServiceImpl(CategoriaRepository categoriaRepository) {
         this.categoriaRepository = categoriaRepository;
     }
 

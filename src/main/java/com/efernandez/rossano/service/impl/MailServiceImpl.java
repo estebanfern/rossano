@@ -1,6 +1,7 @@
-package com.efernandez.rossano.service;
+package com.efernandez.rossano.service.impl;
 
 import com.efernandez.rossano.config.MailConfiguration;
+import com.efernandez.rossano.service.MailService;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import jakarta.mail.internet.MimeMessage;
@@ -16,16 +17,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class MailService {
+public class MailServiceImpl implements MailService {
 
     private final MailConfiguration mailConfiguration;
     private final Configuration configuration;
     private final JavaMailSender javaMailSender;
 
-    @Autowired
-    public MailService(MailConfiguration mailConfiguration,
-                       Configuration configuration,
-                       JavaMailSender javaMailSender) {
+    public MailServiceImpl(MailConfiguration mailConfiguration,
+                           Configuration configuration,
+                           JavaMailSender javaMailSender) {
         this.mailConfiguration = mailConfiguration;
         this.configuration = configuration;
         this.javaMailSender = javaMailSender;
@@ -54,7 +54,7 @@ public class MailService {
         }
     }
 
-    private void sendNewUserEmailBasic(String email, String nombre, String username, String password) {
+    public void sendNewUserEmailBasic(String email, String nombre, String username, String password) {
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);

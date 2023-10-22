@@ -14,6 +14,9 @@ import lombok.ToString;
 @ToString
 public class Producto {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long productoId;
+    @Column(nullable = true, unique = true)
     private String codigoBarra;
     @Column(nullable = true, unique = true)
     private String codigoInterno;
@@ -29,7 +32,7 @@ public class Producto {
     private Long precioFinal;
     @Column(nullable = false)
     private String cat;
-    @Column(columnDefinition = "varchar(2); alter table if exists producto alter column iva set default '10';")
+    @Column(nullable = false)
     private String iva;
 
     @ManyToOne(optional = false)

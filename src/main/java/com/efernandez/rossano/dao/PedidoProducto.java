@@ -15,12 +15,12 @@ public class PedidoProducto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer detalleId;
-    private String id_producto;
+    private Long id_producto;
     private Long id_pedido;
     private Integer cantidad;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "id_producto", referencedColumnName = "codigoBarra", insertable=false, updatable=false)
+    @JoinColumn(name = "id_producto", referencedColumnName = "productoId", insertable=false, updatable=false)
     private Producto producto;
 
     @ManyToOne

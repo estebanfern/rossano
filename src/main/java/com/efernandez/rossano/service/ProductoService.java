@@ -4,9 +4,9 @@ import com.efernandez.rossano.dao.Producto;
 import org.springframework.data.domain.Page;
 
 public interface ProductoService {
-    String save(Producto producto);
+    void save(Producto producto);
     Page<Producto> searchProductos(int start, int length, String codeFilter, String internalFilter, String nameFilter, String catFilter, String descFilter);
-    void delete(String code);
-    Producto findById(String code);
+    void delete(Long id);
+    Producto findById(Long id);
     String edit(Producto producto);
 }

@@ -27,29 +27,21 @@ public class ProductoServiceImpl implements ProductoService {
         this.rossanoConfig = rossanoConfig;
     }
 
-    public String save(Producto producto) {
-        if (productoRepository.findById(producto.getCodigoBarra()).isPresent()) {
-            return String.format("Producto con Código de Barra %s ya existe.", producto.getCodigoBarra());
-        }else if (productoRepository.findByCodigoInterno(producto.getCodigoInterno()).isPresent()) {
-            return String.format("Producto con Código de Interno %s ya existe.", producto.getCodigoBarra());
-        }else if (producto.getCat() == null || producto.getCat().isEmpty()) {
-            return String.format("Debes de seleccionar una Categoria.", producto.getCodigoBarra());
-        }
+    public void save(Producto producto) {
         productoRepository.save(producto);
-        return "";
     }
 
     public Page<Producto> searchProductos(int start, int length, String codeFilter, String internalFilter, String nameFilter, String catFilter, String descFilter) {
         return productoJdbc.searchUsers(start, length, codeFilter, internalFilter, nameFilter, catFilter, descFilter);
     }
 
-    public void delete(String code) {
-        productoRepository.deleteById(code);
+    public void delete(Long id) {
+        productoRepository.deleteById(id);
     }
 
-    public Producto findById(String code) {
-        return productoRepository.findById(code).orElseThrow(
-                () -> new IllegalArgumentException(String.format("Prodcuto with codigo de barra %s not found.", code))
+    public Producto findById(Long id) {
+        return productoRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException(String.format("Prodcuto with id %s not found.", id))
                 );
     }
 

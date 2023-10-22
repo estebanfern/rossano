@@ -48,14 +48,14 @@ public class ProductoController {
 
     @PostMapping("/save")
     public String saveNewProduct(Model model, Producto producto) {
-        String msg = productoService.save(producto);
-        if (msg.isEmpty()) {
+        try {
+            productoService.save(producto);
             return "redirect:/productos?saved";
-        }else {
-            logger.info("User {} try to save a product {}, error={}", SecurityContextHolder.getContext().getAuthentication().getName(), producto, msg);
+        } catch (Throwable e) {
+            logger.info("User {} try to save a product {}, error={}", SecurityContextHolder.getContext().getAuthentication().getName(), producto, e.getMessage());
             model.addAttribute("producto", producto);
             model.addAttribute("categorias", categoriaService.findAll());
-            return "redirect:/productos/save?error=" + URLEncoder.encode(msg, StandardCharsets.UTF_8);
+            return "redirect:/productos/save?error=" + URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
         }
     }
 
@@ -75,14 +75,14 @@ public class ProductoController {
 
     @DeleteMapping("/{code}")
     @ResponseBody
-    public ResponseEntity<Void> deleteProducto(@PathVariable String code) {
-        productoService.delete(code);
+    public ResponseEntity<Void> deleteProducto(@PathVariable Long id) {
+        productoService.delete(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/save/{code}")
-    public String editProductView(Model model,@PathVariable String code, @RequestParam(required = false) String error) {
-        model.addAttribute("producto", productoService.findById(code));
+    public String editProductView(Model model,@PathVariable Long id, @RequestParam(required = false) String error) {
+        model.addAttribute("producto", productoService.findById(id));
         model.addAttribute("categorias", categoriaService.findAll());
         if (error != null && !error.isEmpty()) {
             model.addAttribute("errorMsg", URLDecoder.decode(error, StandardCharsets.UTF_8));

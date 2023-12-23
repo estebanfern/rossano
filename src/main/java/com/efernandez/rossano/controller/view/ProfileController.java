@@ -1,4 +1,4 @@
-package com.efernandez.rossano.controller;
+package com.efernandez.rossano.controller.view;
 
 import com.efernandez.rossano.service.UserService;
 import org.slf4j.Logger;

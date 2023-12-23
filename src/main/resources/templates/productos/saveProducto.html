@@ -24,55 +24,77 @@
                     Complete los campos obligatorios (*)
                 </div>
                 <div class="card-body">
-                    <form th:action="@{/productos/save}" method="post" class="row">
-                        <div class="form-group col-xl-4 col-md-6 mt-auto py-2">
+                    <div class="row">
+                        <input type="text" class="d-none" th:value="${producto.productoId}" name="productoId" id="productoId" placeholder="" />
+                        <div class="form-group col-xl-4 col-md-6 py-2">
                             <label for="name" class="form-label">Código de Barra (*)</label>
-                            <input type="text" class="form-control" th:readonly="${producto.codigoBarra != null ? 'true' : 'false'}" th:value="${producto.codigoBarra}" name="codigoBarra" id="codigoBarra" placeholder="" required />
+                            <input type="text" class="form-control" th:value="${producto.codigoBarra}" name="codigoBarra" id="codigoBarra" placeholder="" required />
+                            <label class="text-danger form-text" id="codigoBarraHelp" hidden>Este campo es obligatorio</label>
                         </div>
-                        <div class="form-group col-xl-4 col-md-6 mt-auto py-2">
+                        <div class="form-group col-xl-4 col-md-6 py-2">
                             <label for="name" class="form-label">Código Interno</label>
                             <input type="text" class="form-control" th:value="${producto.codigoInterno}" name="codigoInterno" id="codigoInterno" placeholder="" />
+                            <label class="text-danger form-text" id="codigoInternoHelp" hidden>Este campo es obligatorio</label>
                         </div>
-                        <div class="form-group col-xl-4 col-md-6 mt-auto py-2">
+                        <div class="form-group col-xl-4 col-md-6 py-2">
                             <label for="name" class="form-label">Nombre (*)</label>
                             <input type="text" class="form-control" th:value="${producto.nombre}" name="nombre" id="nombre" placeholder="" required />
+                            <label class="text-danger form-text" id="nombreHelp" hidden>Este campo es obligatorio</label>
                         </div>
-                        <div class="form-group col-xl-4 col-md-6 mt-auto py-2">
+                        <div class="form-group col-xl-4 col-md-6 py-2">
                             <label for="name" class="form-label">Categoría (*)</label>
                             <select class="form-select" name="cat" id="cat" placeholder="" required>
                                 <option disabled th:selected="${producto != null}" value="">Seleccione una opción</option>
-                                <optgroup label="Roles" id="rolesGroup">
+                                <optgroup label="Roles" id="ivasrolesGroup">
                                     <option th:each="cat : ${categorias}" th:value="${cat.code}" th:selected="${producto.cat == cat.code}" th:text="${cat.nombre}"></option>
                                 </optgroup>
                             </select>
+                            <label class="text-danger form-text" id="catHelp" hidden>Este campo es obligatorio</label>
                         </div>
-                        <div class="form-group col-xl-4 col-md-6 mt-auto py-2">
+                        <div class="form-group col-xl-4 col-md-6 py-2">
                             <label for="name" class="form-label">Existencia (*)</label>
                             <input type="number" class="form-control" th:value="${producto.existencia}" name="existencia" id="existencia" placeholder="" onpaste="return false" onkeypress="onlyNumbers(event)"  required />
+                            <label class="text-danger form-text" id="existenciaHelp" hidden>Este campo es obligatorio</label>
                         </div>
-                        <div class="form-group col-xl-4 col-md-6 mt-auto py-2">
+                        <div class="form-group col-xl-4 col-md-6 py-2">
                             <label for="name" class="form-label">Precio Costo (*)</label>
                             <input type="number" class="form-control" th:value="${producto.precioCosto}" name="precioCosto" id="precioCosto" placeholder="" onpaste="return false" onkeypress="onlyNumbers(event)" required />
+                            <label class="text-danger form-text" id="precioCostoHelp" hidden>Este campo es obligatorio</label>
                         </div>
-                        <div class="form-group col-xl-4 col-md-6 mt-auto py-2">
+                        <div class="form-group col-xl-4 col-md-6 py-2">
                             <label for="name" class="form-label">Precio Final (*)</label>
                             <input type="number" class="form-control" th:value="${producto.precioFinal}" name="precioFinal" id="precioFinal" placeholder="" onpaste="return false" onkeypress="onlyNumbers(event)" required />
+                            <label class="text-danger form-text" id="precioFinalHelp" hidden>Este campo es obligatorio</label>
                         </div>
-                        <div class="form-group col-xl-8 col-md-12 mt-auto py-2">
+                        <div class="form-group col-xl-2 col-md-6 py-2">
+                            <label for="name" class="form-label">IVA (*)</label>
+                            <select class="form-select" name="iva" id="iva" placeholder="" required>
+                                <option disabled th:selected="${producto != null}" value="">Seleccione una opción</option>
+                                <optgroup label="Disponibles" id="ivasGroup">
+                                    <option th:each="iva : ${ivas}" th:value="${iva.div}" th:selected="${producto.iva == iva.div}" th:text="${iva.display}"></option>
+                                </optgroup>
+                            </select>
+                            <label class="text-danger form-text" id="ivaHelp" hidden>Este campo es obligatorio</label>
+                        </div>
+                        <div class="form-group col-xl-6 col-md-12 py-2">
                             <label for="name" class="form-label">Descripción (*)</label>
                             <textarea class="form-control" rows="1" name="descripcion" id="descripcion" maxlength="250" th:text="${producto.descripcion}" required ></textarea>
+                            <label class="text-danger form-text" id="descripcionHelp" hidden>Este campo es obligatorio</label>
                         </div>
                         <div class="col-12 text-center mt-2">
-                            <button type="submit" class="btn btn-success">
+                            <button class="btn btn-success" onclick="submit(this)">
                                 <i class="fa-solid fa-check"></i>
                                 Confirmar
                             </button>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
         <script>
+
+            const fields = ['codigoBarra', 'codigoInterno', 'nombre', 'cat', 'existencia', 'precioCosto', 'precioFinal', 'descripcion', 'iva'];
+
             function onlyNumbers(event) {
                 const teclaPresionada = event.key;
                 const esNumero = /^\d$/.test(teclaPresionada);
@@ -81,6 +103,68 @@
                   event.preventDefault();
                 }
             }
+
+            function submit(btn) {
+                btn.disabled = true;
+                if (!validate()) {
+                    btn.disabled = false;
+                    return false;
+                }
+                $.ithReq({
+                    url: '/productos/save',
+                    method: "POST",
+                    data: JSON.stringify(getData()),
+                    success: function(data) {
+                        hideSpinner();
+                        modal.success({
+                            message: 'Producto guardado exitosamente.'
+                        });
+                    },
+                    error: function(data) {
+                        hideSpinner();
+                        modal.error({
+                            message: data.responseJSON.message ? data.responseJSON.message : 'Ocurrió un error inesperado al procesar la petición.'
+                        });
+                    }
+                });
+                btn.disabled = false;
+            }
+
+            function getData() {
+                return {
+                    codigoBarra: document.getElementById('codigoBarra').value,
+                    codigoInterno: document.getElementById('codigoInterno').value,
+                    nombre: document.getElementById('nombre').value,
+                    cat: document.getElementById('cat').value,
+                    existencia: document.getElementById('existencia').value,
+                    precioCosto: document.getElementById('precioCosto').value,
+                    precioFinal: document.getElementById('precioFinal').value,
+                    descripcion: document.getElementById('descripcion').value,
+                    iva: document.getElementById('iva').value,
+                }
+            }
+
+            function validateField(id) {
+                let field = document.getElementById(id);
+                let fieldHelp = document.getElementById(id + 'Help');
+                if (field.required && field.value == '') {
+                    fieldHelp.hidden = false;
+                    return false;
+                }
+                fieldHelp.hidden = true;
+                return true;
+            }
+
+            function validate() {
+                let valid = true;
+                fields.forEach((e) => {
+                    if (!validateField(e)) {
+                        valid = false;
+                    }
+                });
+                return valid;
+            }
+
         </script>
     </main>
 </body>

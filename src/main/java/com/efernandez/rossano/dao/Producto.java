@@ -16,9 +16,9 @@ public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productoId;
-    @Column(nullable = true, unique = true)
+    @Column(nullable = true)
     private String codigoBarra;
-    @Column(nullable = true, unique = true)
+    @Column(nullable = true)
     private String codigoInterno;
     @Column(nullable = false)
     private String nombre;
@@ -33,10 +33,10 @@ public class Producto {
     @Column(nullable = false)
     private String cat;
     @Column(nullable = false)
-    private String iva;
+    private Integer iva;
 
     @ManyToOne(optional = false)
-    @JsonManagedReference
+//    @JsonManagedReference
     @JoinColumn(name = "cat", referencedColumnName = "code", insertable = false, updatable = false)
     private Categoria categoria;
 

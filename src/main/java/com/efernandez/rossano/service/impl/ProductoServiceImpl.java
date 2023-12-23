@@ -3,14 +3,16 @@ package com.efernandez.rossano.service.impl;
 import com.efernandez.rossano.config.RossanoConfig;
 import com.efernandez.rossano.dao.Producto;
 import com.efernandez.rossano.jdbc.ProductoJdbc;
+import com.efernandez.rossano.model.GenericException;
+import com.efernandez.rossano.model.GenericResponse;
 import com.efernandez.rossano.repository.ProductoRepository;
 import com.efernandez.rossano.service.ProductoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -27,8 +29,16 @@ public class ProductoServiceImpl implements ProductoService {
         this.rossanoConfig = rossanoConfig;
     }
 
-    public void save(Producto producto) {
-        productoRepository.save(producto);
+    public Producto save(Producto producto) throws GenericException {
+        try {
+            return productoRepository.save(producto);
+        } catch (Throwable e) {
+            throw new GenericException(
+                    e.getMessage(),
+                    "P01",
+                    404
+            );
+        }
     }
 
     public Page<Producto> searchProductos(int start, int length, String codeFilter, String internalFilter, String nameFilter, String catFilter, String descFilter) {

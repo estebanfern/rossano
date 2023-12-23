@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.StringJoiner;
 
 @Repository
 public class ProductoJdbc {
@@ -25,6 +26,20 @@ public class ProductoJdbc {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    public List<Producto> get(Producto producto) {
+        String query = "SELECT * FROM producto WHERE (";
+        StringJoiner joiner = new StringJoiner(" ");
+        if (producto.getCodigoBarra() != null) {
+            joiner.add(String.format("codigo_barra = '%s'", producto.getCodigoBarra()));
+        }
+        if (producto.getCodigoInterno() != null) {
+            joiner.add(String.format("codigo_interno = '%s'", producto.getCodigoInterno()));
+        }
+        joiner.add(")");
+        query = query + joiner;
+        logger.info("Executing SQL Query: {}", query);
+        return jdbcTemplate.query(query, new ProductoMapper());
+    }
 
     public Page<Producto> searchUsers(int start, int length, String codeFilter, String internalFilter, String nameFilter, String catFilter, String descFilter) {
         String query = "SELECT *, ct.code AS cat_code, ct.nombre AS cat_nombre FROM producto as prd INNER JOIN categoria AS ct ON prd.cat = ct.code WHERE 1 = 1";

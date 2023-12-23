@@ -1,4 +1,4 @@
-package com.efernandez.rossano.controller;
+package com.efernandez.rossano.controller.view;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

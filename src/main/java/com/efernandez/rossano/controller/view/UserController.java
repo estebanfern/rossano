@@ -1,4 +1,4 @@
-package com.efernandez.rossano.controller;
+package com.efernandez.rossano.controller.view;
 
 import com.efernandez.rossano.dto.DataTableResponse;
 import com.efernandez.rossano.dto.UserDTO;

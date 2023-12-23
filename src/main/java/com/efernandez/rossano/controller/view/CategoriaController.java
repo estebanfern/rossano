@@ -1,4 +1,4 @@
-package com.efernandez.rossano.controller;
+package com.efernandez.rossano.controller.view;
 
 import com.efernandez.rossano.service.CategoriaService;
 import org.springframework.stereotype.Controller;

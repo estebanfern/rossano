@@ -1,10 +1,12 @@
 package com.efernandez.rossano.config;
 
+import com.efernandez.rossano.model.Iva;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
 import java.util.Map;
 
 @Configuration
@@ -13,6 +15,6 @@ import java.util.Map;
 @Setter
 public class RossanoConfig {
 
-    private Map<String, Integer> iva;
+    private List<Iva> iva;
 
 }

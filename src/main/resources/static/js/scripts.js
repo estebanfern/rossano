@@ -30,18 +30,78 @@ window.addEventListener('DOMContentLoaded', event => {
 
 });
 
-//Loader
-const sprinner = document.querySelector('.spinner-wrapper');
-window.addEventListener('load', () => {
+
+hideSpinner = () => {
     sprinner.style.opacity = '0';
     setTimeout(() => {
         sprinner.style.display = 'none';
     }, 200);
-});
+}
 
-window.addEventListener('beforeunload', () => {
+showSpinner = () => {
     sprinner.style.opacity = '100';
     setTimeout(() => {
         sprinner.style.display = '';
     }, 200);
-});
+}
+
+//Loader
+const sprinner = document.querySelector('.spinner-wrapper');
+window.addEventListener('load', hideSpinner);
+window.addEventListener('beforeunload', showSpinner);
+
+
+$.ithReq = function (options) {
+    showSpinner();
+    var defaults = {
+        url: '',
+        type: 'POST',
+        data: {},
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function (data) {
+            console.log(data);
+            hideSpinner();
+        },
+        error: function (data) {
+            console.error(data);
+            hideSpinner();
+        }
+    };
+
+    var settings = $.extend({}, defaults, options);
+
+    $.ajax(settings);
+}
+
+modal = {
+    success : function(options) {
+        let defaults = {
+            title: '<i class="fa-solid fa-circle-check text-success"></i> Resultado exitoso',
+            centerVertical: true,
+            buttons: {
+                ok: {
+                    label: 'Ok', 
+                    className: 'btn btn-success'
+                }
+            }
+        }
+        var settings = $.extend({}, defaults, options);
+        bootbox.dialog(options)
+    },
+    error : function(options) {
+        let defaults = {
+            title: '<i class="fa-solid fa-circle-exclamation text-danger"></i> Ocurrió un error inesperado',
+            centerVertical: true,
+            buttons: {
+                ok: {
+                    label: 'Ok', 
+                    className: 'btn btn-secondary'
+                }
+            }
+        }
+        var settings = $.extend({}, defaults, options);
+        bootbox.dialog(options)
+    }
+}
+
